@@ -84,7 +84,7 @@ if (newName) {
     console.log(files)
     let i = 1
     for (const file of files) {
-        const newFileName = `${newName} Ep${formatNumber(i)}.${extension}`
+        const newFileName = `${newName} E${formatNumber(i)}.${extension}`
         if (files.includes(newFileName)) {
             continue
         }
