@@ -1,0 +1,17 @@
+{
+  "name": "Renamer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "step2.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "renamer": "renamer.js"
+  },
+  "keywords": [],
+  "type": "module",
+  "dependencies": {
+    "mkvpropedit": "^0.0.1"
+  }
+}
