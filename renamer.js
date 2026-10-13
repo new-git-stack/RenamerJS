@@ -4,6 +4,7 @@ import { readdir, rename, unlink, access } from 'node:fs/promises'
 import path from 'node:path'
 import { spawn } from 'node:child_process'
 import { randomUUID } from 'node:crypto'
+import packageJson from './package.json' with { type: 'json' }
 
 function runFFmpeg(args) {
     return new Promise((resolve, reject) => {
@@ -40,9 +41,38 @@ function formatNumber(num) {
     }
 }
 
+const version = packageJson.version
+
+if (process.argv[2] === '--version') {
+    console.log(version)
+    process.exit(0)
+}
+
+if (process.argv[2] === '--help' || !process.argv[2]) {
+    console.log('renamer --version: View renamer version')
+    console.log("renamer mp4: Update the title in the metadata of each mp4 file to it's corresponding filename")
+    console.log('renamer mp4 "Rings Of Power": renames every mp4 file sequentially')
+    for (let i = 1; i < 6; i++) {
+        console.log(`Ep${formatNumber(i)}: Rings of Power Ep${formatNumber(i)}`)
+    }
+    process.exit(0)
+}
+
 const filesArr = await readdir(process.cwd())
-const extension = process.argv[2]
+const extension = process.argv[2]?.toLowerCase()
 const newName = process.argv[3]
+let checkExtension = false
+
+filesArr.forEach(file => {
+    if(file.includes(`.${extension}`)) {
+        checkExtension = !checkExtension
+    }
+})
+
+if (!checkExtension) {
+    console.log(`There are no .${extension} files in the current directory`)
+    process.exit(0)
+}
 
 const files = filesArr.filter(
     (file) => path.extname(file).toLowerCase() === `.${extension}` && !file.toLowerCase().endsWith(`.temp.${extension}`)
@@ -54,7 +84,11 @@ if (newName) {
     console.log(files)
     let i = 1
     for (const file of files) {
-        await rename(file, `${newName} Ep${formatNumber(i)}.${extension}`)
+        const newFileName = `${newName} Ep${formatNumber(i)}.${extension}`
+        if (files.includes(newFileName)) {
+            continue
+        }
+        await rename(file, newFileName)
         i++
     }
 } else if (extension) {
@@ -72,8 +106,8 @@ if (newName) {
                 output
             ])
             await access(output)
-            console.log(`Output: ${output} exists`)
             await rename(output, file)
+            console.log(`FFmpeg processed "${file}" successfully`)
         } catch (error) {
             try {
                 await unlink(output)
@@ -83,8 +117,6 @@ if (newName) {
             console.error(`Failed to process: ${file}`)
             console.error(error.message)
         }
-
-        console.log(`FFmpeg processed ${file} successfully`)
     }
 } else {
     console.log("You have to specify the file extension of the videos")
