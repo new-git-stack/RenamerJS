@@ -108,7 +108,3 @@ Because FFmpeg uses stream copying (`-c copy`), the audio and video streams are 
 - Metadata updates require FFmpeg to be installed and available through `PATH`.
 - Batch renaming may skip files when the proposed destination filename already exists. Review the output filenames before running it on important files.
 - Back up important files before bulk operations.
-
-## License
-
-Add your preferred license here if you intend to distribute the project.
