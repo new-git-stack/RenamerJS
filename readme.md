@@ -52,7 +52,7 @@ The original filename remains unchanged.
 ### 2. Batch rename video files
 
 ```bash
-renamer mp4 "Rings Of Power"
+renamer mp4 "Rings Of Power S01"
 ```
 
 Renames `.mp4` files sequentially using the supplied name.
@@ -66,9 +66,9 @@ Original files:
 3.mp4
 
 Renamed files:
-Rings Of Power Ep01.mp4
-Rings Of Power Ep02.mp4
-Rings Of Power Ep03.mp4
+Rings Of Power S01 E01.mp4
+Rings Of Power S01 E02.mp4
+Rings Of Power S01 E03.mp4
 ```
 
 Files are processed in natural numeric order where possible.
